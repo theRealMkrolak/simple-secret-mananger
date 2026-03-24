@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import uuid4
 
 from config import settings
@@ -41,3 +42,8 @@ def get_current_admin(current_key: ApiKeyResponse = Depends(get_current_api_key)
             detail="Not enough privileges",
         )
     return current_key
+
+
+DBSession = Annotated[Session, Depends(get_db)]
+CurrentApiKey = Annotated[ApiKeyResponse, Depends(get_current_api_key)]
+CurrentAdmin = Annotated[ApiKeyResponse, Depends(get_current_admin)]

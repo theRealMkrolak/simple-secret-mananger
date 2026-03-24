@@ -119,10 +119,10 @@ export default function SecretsPage({ isAdmin }: { isAdmin: boolean }) {
                         {s.secret_id}
                       </TableCell>
                       <TableCell>
-                        <InputGroup className="h-8 max-w-[220px] px-4 py-0 transition-all border-muted-foreground/20 bg-muted/40 rounded-4xl">
+                        <InputGroup className="h-8 w-fit min-w-[140px] px-4 py-0 transition-all border-muted-foreground/20 bg-muted/40 rounded-4xl">
                           <InputGroupAddon className="gap-2.5">
                             <KeyIcon className="size-3 text-primary/60 shrink-0" />
-                            <InputGroupText className="font-mono text-[11px] text-foreground font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
+                            <InputGroupText className="font-mono text-[11px] text-foreground font-semibold whitespace-nowrap">
                               {s.key}
                             </InputGroupText>
                             <InputGroupButton 

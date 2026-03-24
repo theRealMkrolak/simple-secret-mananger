@@ -70,7 +70,7 @@ export default function Login() {
                     setKey(e.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="root_admin_secret..."
+                  placeholder="API_KEY_HERE"
                   autoComplete="off"
                   disabled={isLoading}
                   required

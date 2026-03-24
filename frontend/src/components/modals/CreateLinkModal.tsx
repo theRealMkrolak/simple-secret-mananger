@@ -22,21 +22,33 @@ export function CreateLinkModal({ open, onOpenChange, onSuccess }: { open: boole
     if (!newOpen) {
       setKeyId("");
       setSecretId("");
+      setAvailableSecrets([]);
     }
     onOpenChange(newOpen);
   };
 
+  // Initial fetch for API Keys only
   useEffect(() => {
     if (open) {
-      Promise.all([
-        readKeysApiV1AdminApiKeysGet().then(res => res.data || []),
-        readSecsApiV1AdminSecretsGet().then(res => res.data || [])
-      ]).then(([keysData, secretsData]) => {
-        setAvailableKeys(keysData);
-        setAvailableSecrets(secretsData);
+      readKeysApiV1AdminApiKeysGet().then(res => {
+        setAvailableKeys(res.data || []);
       });
     }
   }, [open]);
+
+  // Re-fetch available secrets when keyId changes
+  useEffect(() => {
+    if (open && keyId) {
+      readSecsApiV1AdminSecretsGet({
+        query: { for_api_key_id: keyId }
+      }).then(res => {
+        setAvailableSecrets(res.data || []);
+      });
+    } else {
+      setAvailableSecrets([]);
+      setSecretId("");
+    }
+  }, [open, keyId]);
 
   const handleSave = async () => {
     if (!keyId || !secretId) return;
@@ -83,9 +95,9 @@ export function CreateLinkModal({ open, onOpenChange, onSuccess }: { open: boole
           <div className="grid grid-cols-[100px_1fr] items-center gap-4 min-w-0">
             <Label className="text-right">Secret</Label>
             <div className="min-w-0">
-              <Select value={secretId} onValueChange={setSecretId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Datavault Secret" />
+              <Select value={secretId} onValueChange={setSecretId} disabled={!keyId}>
+                <SelectTrigger disabled={!keyId}>
+                  <SelectValue placeholder={!keyId ? "Select an API Key first..." : "Select a Datavault Secret"} />
                 </SelectTrigger>
                 <SelectContent>
                   {availableSecrets.map(s => (
@@ -93,6 +105,11 @@ export function CreateLinkModal({ open, onOpenChange, onSuccess }: { open: boole
                       <span className="truncate">#{s.secret_id} - {s.key}</span>
                     </SelectItem>
                   ))}
+                  {availableSecrets.length === 0 && keyId && (
+                    <div className="p-2 text-sm text-muted-foreground text-center">
+                      No unlinked secrets found
+                    </div>
+                  )}
                 </SelectContent>
               </Select>
             </div>

@@ -3,7 +3,6 @@ import { readLinksApiV1AdminLinksGet } from "@/client/sdk.gen";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { CreateLinkModal } from "../components/modals/CreateLinkModal";
 import { ViewLinkModal } from "../components/modals/ViewLinkModal";
 import {
@@ -126,28 +125,28 @@ export default function LinksPage() {
                         {l.id}
                       </TableCell>
                       <TableCell>
-                        <button 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleViewKey(l.api_key_id)}
                           disabled={isFetchingSub}
-                          className="hover:opacity-80 transition-opacity disabled:opacity-50"
+                          className="h-7 gap-1.5 font-mono text-[11px] border-muted-foreground/20 bg-muted/40 hover:bg-muted/60 rounded-full px-3 whitespace-nowrap"
                         >
-                          <Badge variant="outline" className="gap-1.5 font-mono text-[11px] border-muted-foreground/20 bg-background/50">
-                            <KeyIcon className="size-3 text-muted-foreground/70" />
-                            Key:{l.api_key_id.substring(0, 8)}...
-                          </Badge>
-                        </button>
+                          <KeyIcon className="size-3 text-muted-foreground/70" />
+                          Key:{l.api_key_id}
+                        </Button>
                       </TableCell>
                       <TableCell>
-                        <button 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleViewSecret(l.secret_id)}
                           disabled={isFetchingSub}
-                          className="hover:opacity-80 transition-opacity disabled:opacity-50"
+                          className="h-7 gap-1.5 font-mono text-[11px] border-muted-foreground/20 bg-muted/40 hover:bg-muted/60 rounded-full px-3 whitespace-nowrap"
                         >
-                          <Badge variant="outline" className="gap-1.5 font-mono text-[11px] border-cyan-500/30 text-cyan-600 bg-cyan-50/50">
-                            <Lock className="size-3" />
-                            Secret:{l.secret_id.substring(0, 8)}...
-                          </Badge>
-                        </button>
+                          <Lock className="size-3 text-muted-foreground/70" />
+                          Secret:{l.secret_id}
+                        </Button>
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>

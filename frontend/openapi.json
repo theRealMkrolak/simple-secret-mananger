@@ -285,6 +285,23 @@
               "default": 100,
               "title": "Limit"
             }
+          },
+          {
+            "name": "for_api_key_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "For Api Key Id"
+            }
           }
         ],
         "responses": {

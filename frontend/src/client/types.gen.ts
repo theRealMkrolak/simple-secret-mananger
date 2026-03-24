@@ -321,6 +321,10 @@ export type ReadSecsApiV1AdminSecretsGetData = {
          * Limit
          */
         limit?: number;
+        /**
+         * For Api Key Id
+         */
+        for_api_key_id?: string | null;
     };
     url: '/api/v1/admin/secrets/';
 };

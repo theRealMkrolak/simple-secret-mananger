@@ -156,7 +156,8 @@ export const zReadSecsApiV1AdminSecretsGetData = z.object({
     path: z.never().optional(),
     query: z.object({
         skip: z.int().optional().default(0),
-        limit: z.int().optional().default(100)
+        limit: z.int().optional().default(100),
+        for_api_key_id: z.uuid().nullish()
     }).optional()
 });
 
