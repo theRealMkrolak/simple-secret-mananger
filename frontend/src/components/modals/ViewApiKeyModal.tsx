@@ -10,7 +10,7 @@ export function ViewApiKeyModal({ selectedKey, onClose }: { selectedKey: any, on
         <DialogHeader>
           <DialogTitle>View API Key</DialogTitle>
           <DialogDescription>
-            Details of API Key #{selectedKey?.id}.
+            Details of API Key #{selectedKey?.api_key_id}.
           </DialogDescription>
         </DialogHeader>
         {selectedKey && (

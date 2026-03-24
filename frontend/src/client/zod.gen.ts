@@ -62,12 +62,20 @@ export const zSecretCreate = z.object({
 });
 
 /**
+ * SecretListResponse
+ */
+export const zSecretListResponse = z.object({
+    key: z.string(),
+    secret_id: z.uuid()
+});
+
+/**
  * SecretResponse
  */
 export const zSecretResponse = z.object({
     key: z.string(),
-    secret: z.string(),
-    secret_id: z.uuid()
+    secret_id: z.uuid(),
+    secret: z.string()
 });
 
 /**
@@ -130,6 +138,19 @@ export const zDeleteKeyApiV1AdminApiKeysApiKeyIdDeleteData = z.object({
  */
 export const zDeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponse = z.record(z.string(), z.string());
 
+export const zReadKeyApiV1AdminApiKeysApiKeyIdGetData = z.object({
+    body: z.never().optional(),
+    path: z.object({
+        api_key_id: z.uuid()
+    }),
+    query: z.never().optional()
+});
+
+/**
+ * Successful Response
+ */
+export const zReadKeyApiV1AdminApiKeysApiKeyIdGetResponse = zApiKeyResponse;
+
 export const zReadSecsApiV1AdminSecretsGetData = z.object({
     body: z.never().optional(),
     path: z.never().optional(),
@@ -144,7 +165,7 @@ export const zReadSecsApiV1AdminSecretsGetData = z.object({
  *
  * Successful Response
  */
-export const zReadSecsApiV1AdminSecretsGetResponse = z.array(zSecretResponse);
+export const zReadSecsApiV1AdminSecretsGetResponse = z.array(zSecretListResponse);
 
 export const zCreateSecApiV1AdminSecretsPostData = z.object({
     body: zSecretCreate,
@@ -171,6 +192,19 @@ export const zDeleteSecApiV1AdminSecretsSecretIdDeleteData = z.object({
  * Successful Response
  */
 export const zDeleteSecApiV1AdminSecretsSecretIdDeleteResponse = z.record(z.string(), z.string());
+
+export const zReadSecApiV1AdminSecretsSecretIdGetData = z.object({
+    body: z.never().optional(),
+    path: z.object({
+        secret_id: z.uuid()
+    }),
+    query: z.never().optional()
+});
+
+/**
+ * Successful Response
+ */
+export const zReadSecApiV1AdminSecretsSecretIdGetResponse = zSecretResponse;
 
 export const zReadLinksApiV1AdminLinksGetData = z.object({
     body: z.never().optional(),
@@ -214,6 +248,21 @@ export const zDeleteLinkApiV1AdminLinksLinkIdDeleteData = z.object({
  */
 export const zDeleteLinkApiV1AdminLinksLinkIdDeleteResponse = z.record(z.string(), z.string());
 
+export const zReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetData = z.object({
+    body: z.never().optional(),
+    path: z.object({
+        api_key_id: z.uuid()
+    }),
+    query: z.never().optional()
+});
+
+/**
+ * Response Read Available Secrets Api V1 Admin Links Available Secrets  Api Key Id  Get
+ *
+ * Successful Response
+ */
+export const zReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponse = z.array(zSecretResponse);
+
 export const zReadMyKeyApiV1ClientMeGetData = z.object({
     body: z.never().optional(),
     path: z.never().optional(),
@@ -236,7 +285,7 @@ export const zReadMySecretsApiV1ClientSecretsGetData = z.object({
  *
  * Successful Response
  */
-export const zReadMySecretsApiV1ClientSecretsGetResponse = z.array(zSecretResponse);
+export const zReadMySecretsApiV1ClientSecretsGetResponse = z.array(zSecretListResponse);
 
 export const zReadMySecretApiV1ClientSecretsKeyGetData = z.object({
     body: z.never().optional(),

@@ -9,7 +9,7 @@ from sqlalchemy import engine_from_config, pool
 sys.path.insert(0, str(Path(__file__).parent.parent / "backend"))
 
 from config import settings  # noqa: E402
-from models import Base  # noqa: E402
+from database import Base  # noqa: E402
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

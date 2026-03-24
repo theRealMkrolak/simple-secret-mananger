@@ -169,15 +169,11 @@ export const SecretCreateSchema = {
     title: 'SecretCreate'
 } as const;
 
-export const SecretResponseSchema = {
+export const SecretListResponseSchema = {
     properties: {
         key: {
             type: 'string',
             title: 'Key'
-        },
-        secret: {
-            type: 'string',
-            title: 'Secret'
         },
         secret_id: {
             type: 'string',
@@ -188,8 +184,32 @@ export const SecretResponseSchema = {
     type: 'object',
     required: [
         'key',
-        'secret',
         'secret_id'
+    ],
+    title: 'SecretListResponse'
+} as const;
+
+export const SecretResponseSchema = {
+    properties: {
+        key: {
+            type: 'string',
+            title: 'Key'
+        },
+        secret_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Secret Id'
+        },
+        secret: {
+            type: 'string',
+            title: 'Secret'
+        }
+    },
+    type: 'object',
+    required: [
+        'key',
+        'secret_id',
+        'secret'
     ],
     title: 'SecretResponse'
 } as const;

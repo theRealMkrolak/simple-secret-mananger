@@ -1,18 +1,45 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { readMyKeyApiV1ClientMeGet } from "@/client/sdk.gen";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
   const [key, setKey] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (key.trim()) {
-      localStorage.setItem("apiKey", key.trim());
-      navigate("/dashboard");
+    setError(null);
+    setIsLoading(true);
+
+    const trimmedKey = key.trim();
+    if (!trimmedKey) {
+      setError("Please enter an API Key");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Temporarily set it so the interceptor picks it up
+      localStorage.setItem("apiKey", trimmedKey);
+
+      const { data, error: apiError } = await readMyKeyApiV1ClientMeGet();
+
+      if (apiError || !data) {
+        localStorage.removeItem("apiKey");
+        setError("Invalid API Key");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      localStorage.removeItem("apiKey");
+      setError("An unexpected error occurred. Please check your connection.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,16 +66,25 @@ export default function Login() {
                   id="apiKey"
                   type="password"
                   value={key}
-                  onChange={(e) => setKey(e.target.value)}
+                  onChange={(e) => {
+                    setKey(e.target.value);
+                    if (error) setError(null);
+                  }}
                   placeholder="root_admin_secret..."
                   autoComplete="off"
+                  disabled={isLoading}
                   required
                 />
+                {error && (
+                  <p className="text-sm font-medium text-destructive mt-1">
+                    {error}
+                  </p>
+                )}
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full font-semibold">
-                Sign In
+              <Button type="submit" className="w-full font-semibold" disabled={isLoading}>
+                {isLoading ? "Verifying..." : "Sign In"}
               </Button>
             </CardFooter>
           </Card>

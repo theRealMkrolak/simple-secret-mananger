@@ -112,6 +112,52 @@
       }
     },
     "/api/v1/admin/api-keys/{api_key_id}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Read Key",
+        "operationId": "read_key_api_v1_admin_api_keys__api_key_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api_key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Api Key Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Admin"
@@ -249,7 +295,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SecretResponse"
+                    "$ref": "#/components/schemas/SecretListResponse"
                   },
                   "title": "Response Read Secs Api V1 Admin Secrets  Get"
                 }
@@ -270,6 +316,52 @@
       }
     },
     "/api/v1/admin/secrets/{secret_id}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Read Sec",
+        "operationId": "read_sec_api_v1_admin_secrets__secret_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "secret_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Secret Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecretResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Admin"
@@ -479,6 +571,58 @@
         }
       }
     },
+    "/api/v1/admin/links/available-secrets/{api_key_id}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Read Available Secrets",
+        "operationId": "read_available_secrets_api_v1_admin_links_available_secrets__api_key_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api_key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Api Key Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SecretResponse"
+                  },
+                  "title": "Response Read Available Secrets Api V1 Admin Links Available Secrets  Api Key Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/client/me": {
       "get": {
         "tags": [
@@ -519,7 +663,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/SecretResponse"
+                    "$ref": "#/components/schemas/SecretListResponse"
                   },
                   "type": "array",
                   "title": "Response Read My Secrets Api V1 Client Secrets Get"
@@ -771,15 +915,11 @@
         ],
         "title": "SecretCreate"
       },
-      "SecretResponse": {
+      "SecretListResponse": {
         "properties": {
           "key": {
             "type": "string",
             "title": "Key"
-          },
-          "secret": {
-            "type": "string",
-            "title": "Secret"
           },
           "secret_id": {
             "type": "string",
@@ -790,8 +930,31 @@
         "type": "object",
         "required": [
           "key",
-          "secret",
           "secret_id"
+        ],
+        "title": "SecretListResponse"
+      },
+      "SecretResponse": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "secret_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Secret Id"
+          },
+          "secret": {
+            "type": "string",
+            "title": "Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "secret_id",
+          "secret"
         ],
         "title": "SecretResponse"
       },

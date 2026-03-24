@@ -1,11 +1,11 @@
 from uuid import uuid4
 
 from config import settings
-from crud import get_api_key_by_key
 from database import get_db
+from dtos import ApiKeyResponse
 from fastapi import Depends, HTTPException, status
 from fastapi.security import APIKeyHeader
-from schemas import ApiKeyResponse
+from services import get_api_key_by_key
 from sqlalchemy.orm import Session
 
 api_key_header = APIKeyHeader(name="Authorization", auto_error=False)

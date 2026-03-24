@@ -13,7 +13,9 @@ client.interceptors.request.use((req) => {
 client.interceptors.response.use((res) => {
   if (res.status === 401) {
     localStorage.removeItem("apiKey");
-    window.location.href = "/login";
+    if (window.location.pathname !== "/login") {
+      window.location.href = "/login";
+    }
   }
   return res;
 });

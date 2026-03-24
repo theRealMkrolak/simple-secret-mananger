@@ -1,8 +1,8 @@
-from crud import get_secrets_for_api_key
 from database import get_db
 from dependencies import get_current_api_key
+from dtos import ApiKeyResponse, ApiMeResponse, SecretListResponse, SecretResponse
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import ApiKeyResponse, ApiMeResponse, SecretResponse
+from services import get_secret_by_key_for_api_key, get_secrets_for_api_key
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/client", tags=["Client"])
@@ -13,10 +13,10 @@ def read_my_key(current_key: ApiKeyResponse = Depends(get_current_api_key)) -> A
     return ApiMeResponse(is_admin=current_key.is_admin)
 
 
-@router.get("/secrets", response_model=list[SecretResponse])
+@router.get("/secrets", response_model=list[SecretListResponse])
 def read_my_secrets(
     db: Session = Depends(get_db), current_key: ApiKeyResponse = Depends(get_current_api_key)
-) -> list[SecretResponse]:
+) -> list[SecretListResponse]:
     return get_secrets_for_api_key(db, current_key.api_key_id)
 
 
@@ -24,8 +24,7 @@ def read_my_secrets(
 def read_my_secret(
     key: str, db: Session = Depends(get_db), current_key: ApiKeyResponse = Depends(get_current_api_key)
 ) -> SecretResponse:
-    secrets_list = get_secrets_for_api_key(db, current_key.api_key_id)
-    for s in secrets_list:
-        if s.key == key:
-            return s
-    raise HTTPException(status_code=404, detail="Secret not found")
+    secret = get_secret_by_key_for_api_key(db, current_key.api_key_id, key)
+    if not secret:
+        raise HTTPException(status_code=404, detail="Secret not found")
+    return secret

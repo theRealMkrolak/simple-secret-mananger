@@ -1,10 +1,10 @@
 import uuid
 
-from crud import create_api_key, delete_api_key, get_api_keys
 from database import get_db
 from dependencies import get_current_admin
+from dtos import ApiKeyCreate, ApiKeyCreateResponse, ApiKeyResponse
 from fastapi import APIRouter, Depends, HTTPException
-from schemas import ApiKeyCreate, ApiKeyCreateResponse, ApiKeyResponse
+from services import create_api_key, delete_api_key, get_api_key, get_api_keys
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/admin/api-keys", tags=["Admin"])
@@ -25,6 +25,18 @@ def read_keys(
     admin: ApiKeyResponse = Depends(get_current_admin)
 ) -> list[ApiKeyResponse]:
     return get_api_keys(db, skip=skip, limit=limit)
+
+
+@router.get("/{api_key_id}", response_model=ApiKeyResponse)
+def read_key(
+    api_key_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    admin: ApiKeyResponse = Depends(get_current_admin),
+) -> ApiKeyResponse:
+    key = get_api_key(db, api_key_id)
+    if not key:
+        raise HTTPException(status_code=404, detail="API Key not found")
+    return key
 
 
 @router.delete("/{api_key_id}")

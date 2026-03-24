@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ApiKeysPage from "./ApiKeysPage";
 import SecretsPage from "./SecretsPage";
 import LinksPage from "./LinksPage";
+import { useAuth } from "@/providers/AuthProvider";
 import {
   Sidebar,
   SidebarContent,
@@ -18,24 +18,20 @@ import {
 } from "@/components/ui/sidebar";
 
 export default function DashboardLayout() {
-  const token = localStorage.getItem("apiKey");
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("keys");
+  const isAdmin = !!user?.is_admin;
 
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  const logout = () => {
-    localStorage.removeItem("apiKey");
-    navigate("/login");
-  };
+  useEffect(() => {
+    if (!isAdmin) {
+      setActiveTab("secrets");
+    }
+  }, [isAdmin]);
 
   const renderContent = () => {
     switch (activeTab) {
       case "keys": return <ApiKeysPage />;
-      case "secrets": return <SecretsPage />;
+      case "secrets": return <SecretsPage isAdmin={isAdmin} />;
       case "links": return <LinksPage />;
       default: return <ApiKeysPage />;
     }
@@ -52,21 +48,25 @@ export default function DashboardLayout() {
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive={activeTab === 'keys'} onClick={() => setActiveTab('keys')}>
-                      API Keys
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  {isAdmin && (
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'keys'} onClick={() => setActiveTab('keys')}>
+                        API Keys
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )}
                   <SidebarMenuItem>
                     <SidebarMenuButton isActive={activeTab === 'secrets'} onClick={() => setActiveTab('secrets')}>
                       Secrets Vault
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive={activeTab === 'links'} onClick={() => setActiveTab('links')}>
-                      Key Bindings
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  {isAdmin && (
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'links'} onClick={() => setActiveTab('links')}>
+                        Key Bindings
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>

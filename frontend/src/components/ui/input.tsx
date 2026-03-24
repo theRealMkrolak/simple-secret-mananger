@@ -57,4 +57,17 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   )
 }
 
-export { Input, InputGroup, InputGroupButton, InputGroupAddon, InputGroupText }
+function InputGroupTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="input-group-textarea"
+      className={cn(
+        "flex min-h-[80px] w-full resize-none bg-transparent p-0 text-base transition-colors outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Input, InputGroup, InputGroupButton, InputGroupAddon, InputGroupText, InputGroupTextarea }

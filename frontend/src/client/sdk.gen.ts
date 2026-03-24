@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateKeyApiV1AdminApiKeysPostData, CreateKeyApiV1AdminApiKeysPostErrors, CreateKeyApiV1AdminApiKeysPostResponses, CreateLinkApiV1AdminLinksPostData, CreateLinkApiV1AdminLinksPostErrors, CreateLinkApiV1AdminLinksPostResponses, CreateSecApiV1AdminSecretsPostData, CreateSecApiV1AdminSecretsPostErrors, CreateSecApiV1AdminSecretsPostResponses, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteData, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteErrors, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponses, DeleteLinkApiV1AdminLinksLinkIdDeleteData, DeleteLinkApiV1AdminLinksLinkIdDeleteErrors, DeleteLinkApiV1AdminLinksLinkIdDeleteResponses, DeleteSecApiV1AdminSecretsSecretIdDeleteData, DeleteSecApiV1AdminSecretsSecretIdDeleteErrors, DeleteSecApiV1AdminSecretsSecretIdDeleteResponses, ReadKeysApiV1AdminApiKeysGetData, ReadKeysApiV1AdminApiKeysGetErrors, ReadKeysApiV1AdminApiKeysGetResponses, ReadLinksApiV1AdminLinksGetData, ReadLinksApiV1AdminLinksGetErrors, ReadLinksApiV1AdminLinksGetResponses, ReadMyKeyApiV1ClientMeGetData, ReadMyKeyApiV1ClientMeGetResponses, ReadMySecretApiV1ClientSecretsKeyGetData, ReadMySecretApiV1ClientSecretsKeyGetErrors, ReadMySecretApiV1ClientSecretsKeyGetResponses, ReadMySecretsApiV1ClientSecretsGetData, ReadMySecretsApiV1ClientSecretsGetResponses, ReadRootApiV1HealthGetData, ReadRootApiV1HealthGetResponses, ReadSecsApiV1AdminSecretsGetData, ReadSecsApiV1AdminSecretsGetErrors, ReadSecsApiV1AdminSecretsGetResponses } from './types.gen';
+import type { CreateKeyApiV1AdminApiKeysPostData, CreateKeyApiV1AdminApiKeysPostErrors, CreateKeyApiV1AdminApiKeysPostResponses, CreateLinkApiV1AdminLinksPostData, CreateLinkApiV1AdminLinksPostErrors, CreateLinkApiV1AdminLinksPostResponses, CreateSecApiV1AdminSecretsPostData, CreateSecApiV1AdminSecretsPostErrors, CreateSecApiV1AdminSecretsPostResponses, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteData, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteErrors, DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponses, DeleteLinkApiV1AdminLinksLinkIdDeleteData, DeleteLinkApiV1AdminLinksLinkIdDeleteErrors, DeleteLinkApiV1AdminLinksLinkIdDeleteResponses, DeleteSecApiV1AdminSecretsSecretIdDeleteData, DeleteSecApiV1AdminSecretsSecretIdDeleteErrors, DeleteSecApiV1AdminSecretsSecretIdDeleteResponses, ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetData, ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetErrors, ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponses, ReadKeyApiV1AdminApiKeysApiKeyIdGetData, ReadKeyApiV1AdminApiKeysApiKeyIdGetErrors, ReadKeyApiV1AdminApiKeysApiKeyIdGetResponses, ReadKeysApiV1AdminApiKeysGetData, ReadKeysApiV1AdminApiKeysGetErrors, ReadKeysApiV1AdminApiKeysGetResponses, ReadLinksApiV1AdminLinksGetData, ReadLinksApiV1AdminLinksGetErrors, ReadLinksApiV1AdminLinksGetResponses, ReadMyKeyApiV1ClientMeGetData, ReadMyKeyApiV1ClientMeGetResponses, ReadMySecretApiV1ClientSecretsKeyGetData, ReadMySecretApiV1ClientSecretsKeyGetErrors, ReadMySecretApiV1ClientSecretsKeyGetResponses, ReadMySecretsApiV1ClientSecretsGetData, ReadMySecretsApiV1ClientSecretsGetResponses, ReadRootApiV1HealthGetData, ReadRootApiV1HealthGetResponses, ReadSecApiV1AdminSecretsSecretIdGetData, ReadSecApiV1AdminSecretsSecretIdGetErrors, ReadSecApiV1AdminSecretsSecretIdGetResponses, ReadSecsApiV1AdminSecretsGetData, ReadSecsApiV1AdminSecretsGetErrors, ReadSecsApiV1AdminSecretsGetResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -50,6 +50,15 @@ export const deleteKeyApiV1AdminApiKeysApiKeyIdDelete = <ThrowOnError extends bo
 });
 
 /**
+ * Read Key
+ */
+export const readKeyApiV1AdminApiKeysApiKeyIdGet = <ThrowOnError extends boolean = false>(options: Options<ReadKeyApiV1AdminApiKeysApiKeyIdGetData, ThrowOnError>) => (options.client ?? client).get<ReadKeyApiV1AdminApiKeysApiKeyIdGetResponses, ReadKeyApiV1AdminApiKeysApiKeyIdGetErrors, ThrowOnError>({
+    security: [{ name: 'Authorization', type: 'apiKey' }],
+    url: '/api/v1/admin/api-keys/{api_key_id}',
+    ...options
+});
+
+/**
  * Read Secs
  */
 export const readSecsApiV1AdminSecretsGet = <ThrowOnError extends boolean = false>(options?: Options<ReadSecsApiV1AdminSecretsGetData, ThrowOnError>) => (options?.client ?? client).get<ReadSecsApiV1AdminSecretsGetResponses, ReadSecsApiV1AdminSecretsGetErrors, ThrowOnError>({
@@ -75,6 +84,15 @@ export const createSecApiV1AdminSecretsPost = <ThrowOnError extends boolean = fa
  * Delete Sec
  */
 export const deleteSecApiV1AdminSecretsSecretIdDelete = <ThrowOnError extends boolean = false>(options: Options<DeleteSecApiV1AdminSecretsSecretIdDeleteData, ThrowOnError>) => (options.client ?? client).delete<DeleteSecApiV1AdminSecretsSecretIdDeleteResponses, DeleteSecApiV1AdminSecretsSecretIdDeleteErrors, ThrowOnError>({
+    security: [{ name: 'Authorization', type: 'apiKey' }],
+    url: '/api/v1/admin/secrets/{secret_id}',
+    ...options
+});
+
+/**
+ * Read Sec
+ */
+export const readSecApiV1AdminSecretsSecretIdGet = <ThrowOnError extends boolean = false>(options: Options<ReadSecApiV1AdminSecretsSecretIdGetData, ThrowOnError>) => (options.client ?? client).get<ReadSecApiV1AdminSecretsSecretIdGetResponses, ReadSecApiV1AdminSecretsSecretIdGetErrors, ThrowOnError>({
     security: [{ name: 'Authorization', type: 'apiKey' }],
     url: '/api/v1/admin/secrets/{secret_id}',
     ...options
@@ -108,6 +126,15 @@ export const createLinkApiV1AdminLinksPost = <ThrowOnError extends boolean = fal
 export const deleteLinkApiV1AdminLinksLinkIdDelete = <ThrowOnError extends boolean = false>(options: Options<DeleteLinkApiV1AdminLinksLinkIdDeleteData, ThrowOnError>) => (options.client ?? client).delete<DeleteLinkApiV1AdminLinksLinkIdDeleteResponses, DeleteLinkApiV1AdminLinksLinkIdDeleteErrors, ThrowOnError>({
     security: [{ name: 'Authorization', type: 'apiKey' }],
     url: '/api/v1/admin/links/{link_id}',
+    ...options
+});
+
+/**
+ * Read Available Secrets
+ */
+export const readAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGet = <ThrowOnError extends boolean = false>(options: Options<ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetData, ThrowOnError>) => (options.client ?? client).get<ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponses, ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetErrors, ThrowOnError>({
+    security: [{ name: 'Authorization', type: 'apiKey' }],
+    url: '/api/v1/admin/links/available-secrets/{api_key_id}',
     ...options
 });
 

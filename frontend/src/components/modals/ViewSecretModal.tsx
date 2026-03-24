@@ -1,35 +1,71 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { InputGroup, InputGroupAddon, InputGroupTextarea, InputGroupButton } from "@/components/ui/input";
+import { Eye, EyeOff, Copy, Check } from "lucide-react";
 
 export function ViewSecretModal({ selectedSecret, onClose }: { selectedSecret: any, onClose: () => void }) {
+  const [showSecret, setShowSecret] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (selectedSecret?.secret) {
+      navigator.clipboard.writeText(selectedSecret.secret);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleClose = () => {
+    setShowSecret(false);
+    onClose();
+  };
+
   return (
-    <Dialog open={!!selectedSecret} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={!!selectedSecret} onOpenChange={(open) => !open && handleClose()}>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Secret Inspector</DialogTitle>
-          <DialogDescription>
-            Review the sensitive contents and mapping of Secret #{selectedSecret?.id}.
-          </DialogDescription>
+          <DialogTitle>Secret Inspector: {selectedSecret?.key}</DialogTitle>
+          {selectedSecret && (
+            <p className="text-sm text-muted-foreground">
+              Global ID: <span className="font-medium text-foreground">{selectedSecret.secret_id}</span>
+            </p>
+          )}
         </DialogHeader>
         {selectedSecret && (
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <label className="text-right text-sm border-r pr-4 font-semibold">Ref Key</label>
-              <div className="col-span-3">
-                <Badge variant="outline" className="font-mono text-xs">{selectedSecret.key}</Badge>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 mt-4 border-t pt-4">
-              <label className="text-sm font-semibold">Decrypted Payload</label>
-              <div className="p-4 bg-muted text-muted-foreground font-mono text-xs rounded-md break-all">
-                {selectedSecret.secret}
-              </div>
+          <div className="space-y-6 py-2">
+            <div className="space-y-3">
+              <InputGroup className="h-auto py-4 items-start px-4">
+                <InputGroupAddon className="flex-col !items-start gap-4">
+                  <InputGroupTextarea
+                    readOnly
+                    value={showSecret ? selectedSecret.secret : "••••••••••••••••••••••••••••••••"}
+                    className={`font-mono text-sm min-h-[150px] transition-all duration-200 ${!showSecret ? "select-none tracking-widest opacity-40" : "opacity-100"}`}
+                  />
+                  <div className="flex items-center gap-2 w-full justify-end border-t pt-2 border-input/20">
+                    <InputGroupButton
+                      onClick={() => setShowSecret(!showSecret)}
+                      className="h-8 px-3 text-xs gap-2 bg-muted/50 hover:bg-muted"
+                    >
+                      {showSecret ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                      {showSecret ? "Hide" : "Show"}
+                    </InputGroupButton>
+                    <InputGroupButton
+                      onClick={handleCopy}
+                      disabled={!showSecret}
+                      className="h-8 px-3 text-xs gap-2 bg-muted/50 hover:bg-muted"
+                    >
+                      {copied ? <Check className="size-3.5 text-green-500" /> : <Copy className="size-3.5" />}
+                      {copied ? "Copied" : "Copy"}
+                    </InputGroupButton>
+                  </div>
+                </InputGroupAddon>
+              </InputGroup>
             </div>
           </div>
         )}
         <DialogFooter>
-          <Button onClick={onClose} className="w-full">Dismiss</Button>
+          <Button onClick={handleClose} variant="secondary" className="w-full">Dismiss</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

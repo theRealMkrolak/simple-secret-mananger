@@ -125,6 +125,20 @@ export type SecretCreate = {
 };
 
 /**
+ * SecretListResponse
+ */
+export type SecretListResponse = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Secret Id
+     */
+    secret_id: string;
+};
+
+/**
  * SecretResponse
  */
 export type SecretResponse = {
@@ -133,13 +147,13 @@ export type SecretResponse = {
      */
     key: string;
     /**
-     * Secret
-     */
-    secret: string;
-    /**
      * Secret Id
      */
     secret_id: string;
+    /**
+     * Secret
+     */
+    secret: string;
 };
 
 /**
@@ -265,6 +279,36 @@ export type DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponses = {
 
 export type DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponse = DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponses[keyof DeleteKeyApiV1AdminApiKeysApiKeyIdDeleteResponses];
 
+export type ReadKeyApiV1AdminApiKeysApiKeyIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Api Key Id
+         */
+        api_key_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/api-keys/{api_key_id}';
+};
+
+export type ReadKeyApiV1AdminApiKeysApiKeyIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadKeyApiV1AdminApiKeysApiKeyIdGetError = ReadKeyApiV1AdminApiKeysApiKeyIdGetErrors[keyof ReadKeyApiV1AdminApiKeysApiKeyIdGetErrors];
+
+export type ReadKeyApiV1AdminApiKeysApiKeyIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: ApiKeyResponse;
+};
+
+export type ReadKeyApiV1AdminApiKeysApiKeyIdGetResponse = ReadKeyApiV1AdminApiKeysApiKeyIdGetResponses[keyof ReadKeyApiV1AdminApiKeysApiKeyIdGetResponses];
+
 export type ReadSecsApiV1AdminSecretsGetData = {
     body?: never;
     path?: never;
@@ -296,7 +340,7 @@ export type ReadSecsApiV1AdminSecretsGetResponses = {
      *
      * Successful Response
      */
-    200: Array<SecretResponse>;
+    200: Array<SecretListResponse>;
 };
 
 export type ReadSecsApiV1AdminSecretsGetResponse = ReadSecsApiV1AdminSecretsGetResponses[keyof ReadSecsApiV1AdminSecretsGetResponses];
@@ -359,6 +403,36 @@ export type DeleteSecApiV1AdminSecretsSecretIdDeleteResponses = {
 };
 
 export type DeleteSecApiV1AdminSecretsSecretIdDeleteResponse = DeleteSecApiV1AdminSecretsSecretIdDeleteResponses[keyof DeleteSecApiV1AdminSecretsSecretIdDeleteResponses];
+
+export type ReadSecApiV1AdminSecretsSecretIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Secret Id
+         */
+        secret_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/secrets/{secret_id}';
+};
+
+export type ReadSecApiV1AdminSecretsSecretIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadSecApiV1AdminSecretsSecretIdGetError = ReadSecApiV1AdminSecretsSecretIdGetErrors[keyof ReadSecApiV1AdminSecretsSecretIdGetErrors];
+
+export type ReadSecApiV1AdminSecretsSecretIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: SecretResponse;
+};
+
+export type ReadSecApiV1AdminSecretsSecretIdGetResponse = ReadSecApiV1AdminSecretsSecretIdGetResponses[keyof ReadSecApiV1AdminSecretsSecretIdGetResponses];
 
 export type ReadLinksApiV1AdminLinksGetData = {
     body?: never;
@@ -455,6 +529,38 @@ export type DeleteLinkApiV1AdminLinksLinkIdDeleteResponses = {
 
 export type DeleteLinkApiV1AdminLinksLinkIdDeleteResponse = DeleteLinkApiV1AdminLinksLinkIdDeleteResponses[keyof DeleteLinkApiV1AdminLinksLinkIdDeleteResponses];
 
+export type ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Api Key Id
+         */
+        api_key_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/links/available-secrets/{api_key_id}';
+};
+
+export type ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetError = ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetErrors[keyof ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetErrors];
+
+export type ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponses = {
+    /**
+     * Response Read Available Secrets Api V1 Admin Links Available Secrets  Api Key Id  Get
+     *
+     * Successful Response
+     */
+    200: Array<SecretResponse>;
+};
+
+export type ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponse = ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponses[keyof ReadAvailableSecretsApiV1AdminLinksAvailableSecretsApiKeyIdGetResponses];
+
 export type ReadMyKeyApiV1ClientMeGetData = {
     body?: never;
     path?: never;
@@ -484,7 +590,7 @@ export type ReadMySecretsApiV1ClientSecretsGetResponses = {
      *
      * Successful Response
      */
-    200: Array<SecretResponse>;
+    200: Array<SecretListResponse>;
 };
 
 export type ReadMySecretsApiV1ClientSecretsGetResponse = ReadMySecretsApiV1ClientSecretsGetResponses[keyof ReadMySecretsApiV1ClientSecretsGetResponses];
