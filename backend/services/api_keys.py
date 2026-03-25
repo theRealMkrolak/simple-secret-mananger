@@ -1,3 +1,4 @@
+import base64
 import secrets
 from uuid import UUID
 
@@ -11,12 +12,30 @@ from .auth import get_password_hash, verify_password
 def generate_api_key_str() -> str:
     return secrets.token_urlsafe(32)
 
-def get_api_key_by_key(db: Session, key_string: str) -> ApiKeyResponse | None:
+
+def encode_api_key(key_id: UUID, raw_key: str) -> str:
+    """Encode UUID and raw key into a clean opaque sk- prefixed string."""
+    payload = f"{key_id}:{raw_key}".encode()
+    return f"sk-{base64.urlsafe_b64encode(payload).decode()}"
+
+
+def decode_api_key(key_string: str) -> tuple[UUID, str] | None:
+    """Decode an sk- prefixed key back into (UUID, raw_key). Returns None if invalid."""
     try:
-        key_id_str, raw_key = key_string.split(":", 1)
-        key_id = UUID(key_id_str)
-    except ValueError:
+        if not key_string.startswith("sk-"):
+            return None
+        payload = base64.urlsafe_b64decode(key_string[3:]).decode()
+        key_id_str, raw_key = payload.split(":", 1)
+        return UUID(key_id_str), raw_key
+    except Exception:
         return None
+
+
+def get_api_key_by_key(db: Session, key_string: str) -> ApiKeyResponse | None:
+    decoded = decode_api_key(key_string)
+    if not decoded:
+        return None
+    key_id, raw_key = decoded
 
     db_api_key = db.query(ApiKey).filter(ApiKey.api_key_id == key_id).first()
     if not db_api_key:
@@ -25,6 +44,7 @@ def get_api_key_by_key(db: Session, key_string: str) -> ApiKeyResponse | None:
     if verify_password(raw_key, str(db_api_key.hashed_api_key)):
         return ApiKeyResponse.model_validate(db_api_key)
     return None
+
 
 def create_api_key(db: Session, key_in: ApiKeyCreate) -> ApiKeyCreateResponse:
     raw_api_key = generate_api_key_str()
@@ -35,7 +55,7 @@ def create_api_key(db: Session, key_in: ApiKeyCreate) -> ApiKeyCreateResponse:
     db.commit()
     db.refresh(db_api_key)
 
-    full_api_key = f"{db_api_key.api_key_id}:{raw_api_key}"
+    full_api_key = encode_api_key(db_api_key.api_key_id, raw_api_key)
     return ApiKeyCreateResponse(
         api_key_id=db_api_key.api_key_id,
         name=str(db_api_key.name),
