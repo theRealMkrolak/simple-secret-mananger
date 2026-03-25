@@ -11,8 +11,8 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+    console.log("Login attempt");
     setError(null);
     setIsLoading(true);
 
@@ -46,7 +46,7 @@ export default function Login() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center bg-muted/40 p-6 md:p-10">
       <div className="w-full max-w-sm">
-        <form onSubmit={handleLogin}>
+        <div>
           <Card className="shadow-lg border-muted">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold">Login</CardTitle>
@@ -70,6 +70,7 @@ export default function Login() {
                     setKey(e.target.value);
                     if (error) setError(null);
                   }}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                   placeholder="API_KEY_HERE"
                   autoComplete="off"
                   disabled={isLoading}
@@ -83,12 +84,12 @@ export default function Login() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full font-semibold" disabled={isLoading}>
+              <Button onClick={handleLogin} className="w-full font-semibold" disabled={isLoading}>
                 {isLoading ? "Verifying..." : "Sign In"}
               </Button>
             </CardFooter>
           </Card>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext, useContext } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { readMyKeyApiV1ClientMeGet } from "@/client/sdk.gen";
@@ -6,53 +6,21 @@ import type { ApiMeResponse } from "@/client/types.gen";
 
 interface AuthContextType {
   user: ApiMeResponse | null;
-  isLoading: boolean;
   logout: () => void;
-  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<ApiMeResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
   const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("apiKey");
-    setUser(null);
     navigate("/login");
   };
 
-  const refreshUser = async () => {
-    const token = localStorage.getItem("apiKey");
-    if (!token) {
-      setUser(null);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await readMyKeyApiV1ClientMeGet();
-      if (error || !data) {
-        logout();
-      } else {
-        setUser(data);
-      }
-    } catch (err) {
-      logout();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    refreshUser();
-  }, [location.pathname]);
-
   return (
-    <AuthContext.Provider value={{ user, isLoading, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user: null, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -67,10 +35,36 @@ export function useAuth() {
 }
 
 export function AuthGuard({ children }: { children: ReactNode }) {
-  const { user, isLoading } = useAuth();
+  const [status, setStatus] = useState<"loading" | "ok" | "denied">("loading");
+  const [user, setUser] = useState<ApiMeResponse | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  if (isLoading) {
+  useEffect(() => {
+    const token = localStorage.getItem("apiKey");
+    if (!token) {
+      setStatus("denied");
+      return;
+    }
+
+    setStatus("loading");
+    readMyKeyApiV1ClientMeGet().then(({ data, error }) => {
+      if (error || !data) {
+        localStorage.removeItem("apiKey");
+        setStatus("denied");
+      } else {
+        setUser(data);
+        setStatus("ok");
+      }
+    });
+  }, [location.pathname]);
+
+  const logout = () => {
+    localStorage.removeItem("apiKey");
+    navigate("/login");
+  };
+
+  if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-muted-foreground animate-pulse">Verifying access...</div>
@@ -78,9 +72,13 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!user) {
+  if (status === "denied") {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <AuthContext.Provider value={{ user, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
