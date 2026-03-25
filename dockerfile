@@ -24,12 +24,17 @@ COPY alembic.ini .
 # Copy built frontend from Stage 1 into the expected location
 COPY --from=frontend-builder /build/frontend/dist ./frontend/dist
 
-# Expose the port
+# Create database directory and expose port
+RUN mkdir -p /app/database
 EXPOSE 8000
+
+# Declare /app/database as a volume for data persistence
+VOLUME ["/app/database"]
 
 # Set environment variables
 ENV SERVE_FRONTEND=True
 ENV PYTHONPATH=/app/backend
+ENV DATABASE_URL=sqlite:////app/database/secrets.db
 
 # Start Uvicorn pointing to the backend module
 # We run as a module to handle imports correctly
