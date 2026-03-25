@@ -23,7 +23,7 @@ export function ViewSecretModal({ selectedSecret, onClose }: { selectedSecret: a
 
   return (
     <Dialog open={!!selectedSecret} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Secret Inspector: {selectedSecret?.key}</DialogTitle>
           {selectedSecret && (
@@ -33,14 +33,15 @@ export function ViewSecretModal({ selectedSecret, onClose }: { selectedSecret: a
           )}
         </DialogHeader>
         {selectedSecret && (
-          <div className="space-y-6 py-2">
-            <div className="space-y-3">
+          <div className="flex flex-col gap-5 py-2">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-semibold">Secret Value</label>
               <InputGroup className="h-auto py-4 items-start px-4">
                 <InputGroupAddon className="flex-col !items-start gap-4">
                   <InputGroupTextarea
                     readOnly
                     value={showSecret ? selectedSecret.secret : "••••••••••••••••••••••••••••••••"}
-                    className={`font-mono text-sm min-h-[150px] transition-all duration-200 ${!showSecret ? "select-none tracking-widest opacity-40" : "opacity-100"}`}
+                    className={`font-mono text-sm min-h-[160px] transition-all duration-200 ${!showSecret ? "select-none tracking-widest opacity-40" : "opacity-100"}`}
                   />
                   <div className="flex items-center gap-2 w-full justify-end border-t pt-2 border-input/20">
                     <InputGroupButton
