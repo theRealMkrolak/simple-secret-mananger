@@ -98,6 +98,10 @@ export type ApiMeResponse = {
      * Is Admin
      */
     is_admin: boolean;
+    /**
+     * Name
+     */
+    name: string;
 };
 
 /**

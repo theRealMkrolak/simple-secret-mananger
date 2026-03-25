@@ -127,11 +127,16 @@ export const ApiMeResponseSchema = {
         is_admin: {
             type: 'boolean',
             title: 'Is Admin'
+        },
+        name: {
+            type: 'string',
+            title: 'Name'
         }
     },
     type: 'object',
     required: [
-        'is_admin'
+        'is_admin',
+        'name'
     ],
     title: 'ApiMeResponse'
 } as const;

@@ -3,6 +3,9 @@ import ApiKeysPage from "./ApiKeysPage";
 import SecretsPage from "./SecretsPage";
 import LinksPage from "./LinksPage";
 import { useAuth } from "@/providers/AuthProvider";
+import { useTheme } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
+import { Sun, Moon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,8 +22,11 @@ import {
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("keys");
   const isAdmin = !!user?.is_admin;
+
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   useEffect(() => {
     if (!isAdmin) {
@@ -86,6 +92,16 @@ export default function DashboardLayout() {
           <header className="h-16 border-b bg-background flex items-center px-4 shrink-0 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 w-full">
             <SidebarTrigger />
             <span className="font-bold text-lg ml-4">Dashboard</span>
+            <div className="ml-auto flex items-center gap-3">
+              {user?.name && (
+                <span className="text-sm text-muted-foreground hidden sm:block">
+                  {user.name}
+                </span>
+              )}
+              <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </Button>
+            </div>
           </header>
           <div className="flex-1 overflow-auto p-6 md:p-8">
             {renderContent()}

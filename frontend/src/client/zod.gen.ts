@@ -50,7 +50,8 @@ export const zApiKeySecretLinkResponse = z.object({
  * ApiMeResponse
  */
 export const zApiMeResponse = z.object({
-    is_admin: z.boolean()
+    is_admin: z.boolean(),
+    name: z.string()
 });
 
 /**

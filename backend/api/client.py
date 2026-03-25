@@ -8,7 +8,7 @@ router = APIRouter(prefix="/client", tags=["Client"])
 
 @router.get("/me", response_model=ApiMeResponse)
 def read_my_key(current_key: CurrentApiKey) -> ApiMeResponse:
-    return ApiMeResponse(is_admin=current_key.is_admin)
+    return ApiMeResponse(is_admin=current_key.is_admin, name=current_key.name)
 
 
 @router.get("/secrets", response_model=list[SecretListResponse])
