@@ -17,7 +17,7 @@ const toCamelCase = (str: string) => {
 export function CreateSecretModal({ open, onOpenChange, onSuccess }: { open: boolean, onOpenChange: (open: boolean) => void, onSuccess: () => void }) {
   const [keyRef, setKeyRef] = useState("");
   const [secretVal, setSecretVal] = useState("");
-  const [showSecret, setShowSecret] = useState(false);
+  const [showSecret, setShowSecret] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,7 @@ export function CreateSecretModal({ open, onOpenChange, onSuccess }: { open: boo
     // Auto-fix to camelCase as they type for immediate UX
     const camel = toCamelCase(raw);
     setKeyRef(camel);
-    
+
     // Explicitly check for validity (must start with lowercase)
     if (raw && !/^[a-z][a-zA-Z0-9]*$/.test(camel)) {
       setError("Must be valid camelCase (e.g., mySecret)");
@@ -43,7 +43,7 @@ export function CreateSecretModal({ open, onOpenChange, onSuccess }: { open: boo
     const { error: apiErr } = await createSecApiV1AdminSecretsPost({
       body: { key: keyRef, secret: secretVal }
     });
-    
+
     if (apiErr) {
       setError(typeof apiErr === 'string' ? apiErr : "Failed to store secret - check format");
       return;
@@ -58,7 +58,7 @@ export function CreateSecretModal({ open, onOpenChange, onSuccess }: { open: boo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Add New Vault Secret</DialogTitle>
           <DialogDescription>
