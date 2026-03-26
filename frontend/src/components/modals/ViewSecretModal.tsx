@@ -23,7 +23,7 @@ export function ViewSecretModal({ selectedSecret, onClose }: { selectedSecret: a
 
   return (
     <Dialog open={!!selectedSecret} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Secret Inspector: {selectedSecret?.key}</DialogTitle>
           {selectedSecret && (

@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Eye, MoreHorizontal, Trash, Key as KeyIcon, Lock, Link2 } from "lucide-react";
+import { Eye, MoreHorizontal, Trash, Key as KeyIcon, Lock, Link2, ArrowLeftRight } from "lucide-react";
 import {
   deleteLinkApiV1AdminLinksLinkIdDelete,
   readKeyApiV1AdminApiKeysApiKeyIdGet,
@@ -94,7 +94,9 @@ export default function LinksPage() {
         <CardHeader className="pb-2">
           <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-2">
             <Link2 className="size-5 text-primary" />
-            Key ↔ Secret Access Paths
+            API Key
+            <ArrowLeftRight className="size-4 text-muted-foreground" />
+            Secret
           </CardTitle>
         </CardHeader>
         <CardContent>
